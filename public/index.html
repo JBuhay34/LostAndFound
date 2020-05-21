@@ -1,0 +1,55 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <!-- https://drive.google.com/drive/folders/1AcqF78qo6XtCSM59kMPI67-4I1w5QgG4?usp=sharing -->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A cool thing made with Glitch" />
+
+    <title>Lost And Found</title>
+
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://glitch.com/edit/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/reset.css" />
+  </head>
+
+  <body>
+    <div id="outer-div">
+      <img
+        id="building-img"
+        src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2FShields-entrance_Credit-Hector-Villicana_1924x1282-960x600-c-center.jpg?v=1590041946783"
+      />
+
+      <div id="logo-above-login">
+        <img
+          id="lost-and-found-img"
+          src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2FLogoLostAndFound.png?v=1590041679615"
+          alt="UCD Lost and Found Logo"
+        />
+        <!--   TODO: change onclick later       -->
+        <div class="login-button" onclick="location.href = '/prompt';">
+          <img
+            id="google-img"
+            src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2Fgoogle.jpg?v=1590041925515"
+            alt="google"
+          />
+          <h3 class="login-button-text">
+            Login with Google
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="script.js" defer></script>
+  </body>
+</html>
