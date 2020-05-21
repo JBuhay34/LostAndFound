@@ -36,6 +36,27 @@ body{
   margin:60px;
 }
 
+.button{
+  font-family: 'Montserrat', sans-serif;
+  font-weight:bold;
+  color:white;
+  padding:20px 5px;
+  padding-left:20px;
+  border-radius:8px;
+  font-size:24px;
+  margin:20px 0px;
+  display:flex;
+  width:170px;
+  align-items:center:
+  justify-content:center;
+}
+#finder{
+  background-color:#daab27;
+}
+#seeker{
+  background-color:#142a50;
+}
+
 
 @media only screen and (min-width: 600px) {
   #two-pairs{

@@ -24,26 +24,30 @@
 
   <body>
     <div id="outer-div">
-    
-        <img
-          id="lost-and-found-img"
-          src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2FLogoLostAndFound.png?v=1590041679615"
-          alt="UCD Lost and Found Logo"
-        />
-      
+      <img
+        id="lost-and-found-img"
+        src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2FLogoLostAndFound.png?v=1590041679615"
+        alt="UCD Lost and Found Logo"
+      />
+
       <div id="two-pairs">
         <div class="pair">
           <h3 class="question">
             Did you find something?
           </h3>
+          <div class="button" id="finder" onclick="location.href = '/inputfound';">
+            I'm a finder
+          </div>
         </div>
-        <div class="pair" >
+        <div class="pair">
           <h3 class="question">
             Or are you looking for something?
           </h3>
+          <div class="button" id="seeker">
+            I'm a seeker
+          </div>
         </div>
       </div>
-    
     </div>
 
     <!-- import the webpage's client-side javascript file -->
