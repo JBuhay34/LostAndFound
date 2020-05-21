@@ -19,11 +19,15 @@ app.use(express.static("public"));
 
 // https://expressjs.com/en/starter/basic-routing.html
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + "/public/index.html");
+  response.sendFile(__dirname + "/views/index.html");
 });
 
 app.get("/prompt", (request, response) => {
-  response.sendFile(__dirname + "/public/screen2.html");
+  response.sendFile(__dirname + "/views/screen2.html");
+});
+
+app.get("/inputfound", (request, response) => {
+  response.sendFile(__dirname + "/views/inputfound.html");
 });
 
 // send the default array of dreams to the webpage
