@@ -1,7 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
 
 body {
-  background-color: #b3c1d1;
+  /*   background-color: #b3c1d1; */
+  background-color: #feebb1;
 }
 
 #outer-div {
@@ -21,7 +22,7 @@ body {
 }
 
 .header {
-  margin-top:10px;
+  margin-top: 10px;
   margin-bottom: 20px;
   color: #142a50;
   font-size: 24px;
@@ -64,6 +65,7 @@ textarea {
 
 .button {
   font-family: "Montserrat", sans-serif;
+  cursor: pointer;
   font-weight: bold;
   color: white;
   padding: 10px 5px;
@@ -88,19 +90,24 @@ textarea {
 
 .searchbar {
   background-color: #e5e5e5;
-  display:flex;
-  flex-direction:row;
-  justify-content:flex-start;
-  width:80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 80%;
+  margin-bottom: 12px;
 }
-#search-text{
-  margin-left:10px;
-  padding-right:10px;
-  width:90%;
+#search-text {
+  margin-left: 10px;
+  padding-right: 10px;
+  width: 90%;
 }
 #search-btn {
   width: 20px;
-  padding:10px;
+  padding: 10px;
+}
+#submit-button {
+  background-color: #daab27;
+  align-self: flex-end;
 }
 
 @media only screen and (min-width: 600px) {
@@ -125,7 +132,7 @@ textarea {
   .img-btn {
     margin-left: 60px;
   }
-  .searchbar{
-    width:40%;
+  .searchbar {
+    width: 40%;
   }
 }
