@@ -33,6 +33,7 @@ body{
 }
 
 .login-button{
+  cursor: pointer;
   display:flex;
   flex-direction:row;
   color: #142a50;

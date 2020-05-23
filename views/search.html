@@ -30,11 +30,19 @@
         alt="UCD Lost and Found Logo"
       />
       <h1 class="header">
-        Input the found item
+        Search for Existing Requests
       </h1>
+      <div class="searchbar">
+        <input type="text" id="search-text" />
+        <img
+          id="search-btn"
+          src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2Fsearch-solid.svg?v=1590041937119"
+          onclick="location.href = '/search?';"
+        />
+      </div>
       <div id="form">
         <p class="label">
-          Title
+          Date & Time
         </p>
         <input type="text" />
         <p class="label">
@@ -42,28 +50,14 @@
         </p>
         <input type="text" />
         <p class="label">
-          Description
+          Location
         </p>
-        <textarea id="writemessage" rows="10" cols="50"></textarea>
-        <p class="label">
-          Attach a photo (optional)
-        </p>
-        <div class="img-btn">
-          <p class="own-label">
-            Choose File
-          </p>
-        </div>
-        <div class="button" id="next-button" onclick="location.href = '/inputfoundlocation';">
-          Next
+
+        <div class="button" id="submit-button">
+          Search
         </div>
       </div>
-      <h1 class="header">
-        Or search for existing requests
-      </h1>
-      <div class="searchbar">
-        <input type="text" id="search-text"/>
-        <img id="search-btn" src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2Fsearch-solid.svg?v=1590041937119" onclick="location.href = '/search?';"/>
-      </div>
+
     </div>
 
     <!-- import the webpage's client-side javascript file -->
