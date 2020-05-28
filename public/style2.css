@@ -3,6 +3,9 @@
 body {
   background-color: #b3c1d1;
 }
+a{
+  text-decoration: none;
+}
 
 #outer-div {
   display: flex;
