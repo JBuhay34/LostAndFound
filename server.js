@@ -123,7 +123,7 @@ app.get(
   "/auth/accepted",
   passport.authenticate("google", {
     successRedirect: "/setcookie",
-    failureRedirect: "/"
+    failureRedirect: "/?email=notUCD"
   })
 );
 
@@ -169,11 +169,23 @@ app.get("/inputfound", (request, response) => {
 });
 
 app.get("/inputfoundlocation", (request, response) => {
-  response.sendFile(__dirname + "/views/inputlocation.html");
+  response.sendFile(__dirname + "/views/inputfoundlocation.html");
 });
 
-app.get("/search?:item", (request, response) => {
-  response.sendFile(__dirname + "/views/search.html");
+app.get("/inputseeker", (request, response) => {
+  response.sendFile(__dirname + "/views/inputseeker.html");
+});
+
+app.get("/inputseekerlocation", (request, response) => {
+  response.sendFile(__dirname + "/views/inputseekerlocation.html");
+});
+
+app.get("/searchseeker?:item", (request, response) => {
+  response.sendFile(__dirname + "/views/searchseeker.html");
+});
+
+app.get("/searchfound?:item", (request, response) => {
+  response.sendFile(__dirname + "/views/searchfound.html");
 });
 
 // listen for requests :)
@@ -215,8 +227,9 @@ function gotProfile(accessToken, refreshToken, profile, done) {
 // Never sends response back.
 function printIncomingRequest(req, res, next) {
   console.log("Serving", req.url);
-  if (req.cookies) {
-    console.log("cookies", req.cookies);
+  if(req.url === "/?email=notUCD") {
+    console.log("error message!");
+    // res.send(req.url);
   }
   next();
 }

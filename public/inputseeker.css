@@ -2,7 +2,11 @@
 
 body {
   /*   background-color: #b3c1d1; */
-  background-color: #feebb1;
+  background-color: #b3c1d1;
+}
+
+a{
+  text-decoration: none;
 }
 
 #outer-div {
@@ -81,6 +85,10 @@ textarea {
 #next-button {
   background-color: #142a50;
   align-self: flex-end;
+}
+
+#next-text{
+  color:white;
 }
 
 .img-btn {

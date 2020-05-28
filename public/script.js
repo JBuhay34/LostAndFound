@@ -1,7 +1,9 @@
 
 
-let xhr = new XMLHttpRequest();
+let login = document.getElementById("login-button-text");
+
+if (window.location.search === "?email=notUCD") {
+  login.textContent = "Login with your  UC Davis email account";
+}
 
 
-xhr.open("GET", '/displayerror' + window.location.search);
-xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
