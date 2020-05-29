@@ -25,10 +25,10 @@
   <body>
     <div id="outer-div">
       <a id="lost-and-found-img" href="/prompt">
-      <img
-        src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2FLogoLostAndFound.png?v=1590041679615"
-        alt="UCD Lost and Found Logo"
-      />
+        <img
+          src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2FLogoLostAndFound.png?v=1590041679615"
+          alt="UCD Lost and Found Logo"
+        />
       </a>
       <h1 class="header">
         Search for Existing Requests
@@ -36,30 +36,39 @@
       <div class="searchbar">
         <input type="text" id="search-text" />
         <a href="/searchfound?">
-        <img
-          id="search-btn"
-          src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2Fsearch-solid.svg?v=1590041937119"
-        />
+          <img
+            id="search-btn"
+            src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2Fsearch-solid.svg?v=1590041937119"
+          />
         </a>
       </div>
       <div id="form">
         <p class="label">
           Date & Time
         </p>
-        <input type="text" />
+        <div class="date-time">
+          <input type="date" id="date-start-input" />
+          <input type="time" id="time-start-input" />
+          <p class="label">
+            To
+          </p>
+          <div class="date-time">
+            <input type="date" id="date-end-input" />
+            <input type="time" id="time-end-input" />
+          </div>
+        </div>
         <p class="label">
           Category
         </p>
-        <input type="text" />
+        <input type="text" id="category-input"/>
         <p class="label">
           Location
         </p>
-
+        <input type="text" id="location-input"/>
         <div class="button" id="submit-button">
           Search
         </div>
       </div>
-
     </div>
 
     <!-- import the webpage's client-side javascript file -->

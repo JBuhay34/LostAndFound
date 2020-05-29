@@ -5,7 +5,7 @@ body {
   background-color: #b3c1d1;
 }
 
-a{
+a {
   text-decoration: none;
 }
 
@@ -54,6 +54,11 @@ a{
   margin: 10px;
 }
 
+.date-time{
+  display:flex;
+  flex-direction:row;
+}
+
 input {
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
@@ -87,8 +92,8 @@ textarea {
   align-self: flex-end;
 }
 
-#next-text{
-  color:white;
+#next-text {
+  color: white;
 }
 
 .img-btn {
@@ -127,18 +132,18 @@ textarea {
     width: 50%;
   }
   .label {
-    margin-left: 60px;
+    margin-left: 10px;
   }
   input {
-    margin-left: 60px;
+    margin-left: 10px;
   }
 
   textarea {
-    margin-left: 60px;
+    margin-left: 10px;
   }
 
   .img-btn {
-    margin-left: 60px;
+    margin-left: 10px;
   }
   .searchbar {
     width: 40%;
