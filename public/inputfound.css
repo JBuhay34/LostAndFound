@@ -117,6 +117,12 @@ textarea {
   width: 20px;
   padding: 10px;
 }
+#error-message{
+  display: none;
+  margin-right:10px;
+  color:red;
+  align-self: flex-end;
+}
 #submit-button {
   background-color: #daab27;
   align-self: flex-end;
