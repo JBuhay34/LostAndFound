@@ -114,6 +114,12 @@ textarea {
   padding-right: 10px;
   width: 90%;
 }
+#error-message{
+  display:none;
+  margin-right:10px;
+  color:red;
+  align-self: flex-end;
+}
 #search-btn {
   width: 20px;
   padding: 10px;
