@@ -1,0 +1,71 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+<!DOCTYPE html>
+<html lang="en">
+  <!-- https://drive.google.com/drive/folders/1AcqF78qo6XtCSM59kMPI67-4I1w5QgG4?usp=sharing -->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A cool thing made with Glitch" />
+
+    <title>Lost And Found</title>
+
+    <link
+      id="favicon"
+      rel="icon"
+      href="https://glitch.com/edit/favicon-app.ico"
+      type="image/x-icon"
+    />
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/results.css" />
+    <link rel="stylesheet" href="/reset.css" />
+  </head>
+
+  <body>
+    <div id="outer-div">
+      <a id="lost-and-found-img" href="/prompt">
+        <img
+          src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2FLogoLostAndFound.png?v=1590041679615"
+          alt="UCD Lost and Found Logo"
+        />
+      </a>
+      <h1 class="header">
+        Showing results for
+      </h1>
+      <div class="date-and-search">
+        <h2 id="results-date">
+          May 10th-May 17th, Phones, Quad
+        </h2>
+        <div class="button">
+            Edit Search
+        </div>
+      </div>
+      <ul id="card-list">
+        <li class="card">
+          <p>
+            ISO iPhone 11 w/ red case
+          </p>
+          <div class="more">
+            More
+          </div>
+        </li>
+      </ul>
+      <h1 class="header">
+        Or search for existing requests
+      </h1>
+      <div class="searchbar">
+        <input type="text" id="search-text" />
+        <a href="/searchfound?">
+          <img
+            id="search-btn"
+            src="https://cdn.glitch.com/8e2f0d27-5264-420e-b020-953ea17dcbb6%2Fsearch-solid.svg?v=1590041937119"
+          />
+        </a>
+      </div>
+    </div>
+
+    <!-- import the webpage's client-side javascript file -->
+    <script src="results.js" defer></script>
+  </body>
+</html>

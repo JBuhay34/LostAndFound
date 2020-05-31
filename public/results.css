@@ -1,0 +1,156 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+
+a {
+  text-decoration: none;
+}
+
+#outer-div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+
+#lost-and-found-img {
+  margin-bottom: 40px;
+  margin-top: 40px;
+  margin-right: 40px;
+  width: 40%;
+  align-self: flex-end;
+}
+
+.header {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #142a50;
+  font-size: 24px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+}
+
+#results-date{
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #142a50;
+  font-size: 24px;
+  font-family: "Montserrat", sans-serif;
+}
+
+.date-and-search{
+  display: flex;
+  flex-direction: row;
+}
+
+.label {
+  color: #365c85;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  margin: 10px;
+}
+
+.date-time{
+  display:flex;
+  flex-direction:row;
+}
+
+input {
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  border: none;
+  width: auto;
+  background-color: #e5e5e5;
+  margin: 0px 10px;
+}
+
+.button {
+  background-color:#142a50;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+  padding: 10px 5px;
+  border-radius: 8px;
+  font-size: 16px;
+  margin: 0px 24px;
+  display: flex;
+  width: 100px;
+  align-items: center;
+  justify-content: center;
+}
+
+#card-list{
+  margin-top:10px;
+  width:50%;
+}
+
+.card{
+  margin-top:10px;
+  font-family: "Montserrat", sans-serif;
+  background-color:#b3c1d1;
+  color:#142a50;
+  font-size: 24px;
+  padding: 10px 5px;
+  display: flex;
+  flex-direction:row;
+}
+
+.more{
+  color:#142a50;
+  margin-left: auto;
+  margin-right:5px;
+  font-weight:bold;
+}
+
+.searchbar {
+  background-color: #e5e5e5;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 80%;
+  margin-bottom: 12px;
+}
+#search-text {
+  margin-left: 10px;
+  padding-right: 10px;
+  width: 90%;
+}
+#search-btn {
+  width: 20px;
+  padding: 10px;
+}
+#error-message{
+  display: none;
+  margin-right:10px;
+  color:red;
+  align-self: flex-end;
+}
+#submit-button {
+  background-color: #daab27;
+  align-self: flex-end;
+}
+
+@media only screen and (min-width: 600px) {
+  #outer-div {
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .label {
+    margin-left: 10px;
+  }
+  input {
+    margin-left: 10px;
+  }
+
+  textarea {
+    margin-left: 10px;
+  }
+
+  .img-btn {
+    margin-left: 10px;
+  }
+  .searchbar {
+    width: 40%;
+  }
+}
