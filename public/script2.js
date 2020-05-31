@@ -49,12 +49,12 @@ function storeDataPage2() {
   var xmlhttp = new XMLHttpRequest();
   // xmlhttp.open("POST", '/saveDisplay');
   // important to set this for body-parser
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  // all set up!  Send off the HTTP request
-  xmlhttp.send(JSON.stringify(data));
+  // xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  // // all set up!  Send off the HTTP request
+  // xmlhttp.send(JSON.stringify(data));
 
   //TODO: List of items here
-  // window.location =
+  window.location = "https://lost-and-found-steps.glitch.me/resultsseeker"
 }
 
 if (nextButton !== null) {

@@ -180,6 +180,10 @@ app.get("/inputseekerlocation", (request, response) => {
   response.sendFile(__dirname + "/views/inputseekerlocation.html");
 });
 
+app.get("/resultsseeker", (request, response) => {
+  response.sendFile(__dirname + "/views/results.html");
+});
+
 app.get("/searchseeker?:item", (request, response) => {
   response.sendFile(__dirname + "/views/searchseeker.html");
 });
