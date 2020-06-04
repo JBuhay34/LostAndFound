@@ -4,11 +4,12 @@
 // we've started you off with Express (https://expressjs.com/)
 // but feel free to use whatever libraries or frameworks you'd like through `package.json`.
 const express = require("express");
-
+const multer = require("multer");
+const fs = require("fs");
 // some of the ones we have used before
 const bodyParser = require("body-parser");
 // const sqlite3 = require('sqlite3');  // we'll need this later
-
+const FormData = require("form-data");
 // and some new ones related to doing the login process
 const passport = require("passport");
 // There are other strategies, including Facebook and Spotify
@@ -21,10 +22,21 @@ const expressSession = require("express-session");
 
 const request = require("request");
 
+let storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, __dirname + "/images");
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+// let upload = multer({dest: __dirname+"/assets"});
+let upload = multer({ storage: storage });
 // Start setting up the Server pipeline
 const app = express();
 console.log("setting up pipeline");
-
+const sql = require("sqlite3").verbose();
+const db = new sql.Database("lostfound.db");
 // take HTTP message body and put it as a string into req.body
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -38,6 +50,31 @@ app.use("/", printIncomingRequest);
 // https://expressjs.com/en/starter/static-files.html
 app.use(express.static("public"));
 
+//Set Up database
+//create db if DNE
+let cmd =
+  " SELECT name FROM sqlite_master WHERE type='table' AND name='lostfoundtable'";
+db.get(cmd, function(err, val) {
+  console.log(err, val);
+  if (val == undefined) {
+    console.log("No database file - creating one");
+    initDB();
+  } else {
+    console.log("Database file found");
+  }
+});
+
+function initDB() {
+  const cmd =
+    "CREATE TABLE lostfoundtable ( rowIdNum INTEGER PRIMARY KEY, id TEXT, lostorfound TEXT, title TEXT, category TEXT, description TEXT, photourl TEXT, date TEXT, time TEXT, location TEXT)";
+  db.run(cmd, function(err, val) {
+    if (err) {
+      console.log("failed to create LFtable", err.message);
+    } else {
+      console.log("Created database");
+    }
+  });
+}
 // Setup passport, passing it information about what we want to do
 passport.use(
   new GoogleStrategy(
@@ -192,14 +229,6 @@ app.get("/searchfound?:item", (request, response) => {
   response.sendFile(__dirname + "/views/searchfound.html");
 });
 
-
-
-
-
-
-
-
-
 // listen for requests :)
 const listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
@@ -239,7 +268,7 @@ function gotProfile(accessToken, refreshToken, profile, done) {
 // Never sends response back.
 function printIncomingRequest(req, res, next) {
   console.log("Serving", req.url);
-  if(req.url === "/?email=notUCD") {
+  if (req.url === "/?email=notUCD") {
     console.log("error message!");
     // res.send(req.url);
   }
@@ -289,3 +318,141 @@ function requireLogin(req, res, next) {
     next();
   }
 }
+// STACKOVERFLOW
+function makeid(length) {
+  var result = "";
+  var characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+app.use(bodyParser.json());
+app.post("/saveitem", function(request, response, next) {
+  console.log("Server recieved", request.body);
+  let id = makeid(24);
+  console.log(id);
+  let lostorfound = request.body.lostorfound;
+  let title = request.body.title;
+  let category = request.body.category;
+  let description = request.body.description;
+  let date = request.body.date;
+  let time = request.body.time;
+  let location = request.body.location;
+  let photourl = request.body.photourl;
+  // console.log("id: ",id,"image: ",image,"message: ",message,"color",color,"font", font
+  // );
+
+  // Insert new DB row
+  cmd =
+    "INSERT INTO lostfoundtable ( id , lostorfound, title, category , description, photourl, date , time , location ) VALUES (@0,@1,@2,@3,@4,@5,@6,@7,@8) ";
+  db.run(
+    cmd,
+    id,
+    lostorfound,
+    title,
+    category,
+    description,
+    photourl,
+    date,
+    time,
+    location,
+    function(err) {
+      if (err) {
+        console.log("DB error for new val", err.message);
+        next();
+      } else {
+        let uniqid = id; // the rowid of last item
+        response.send(uniqid);
+      }
+    }
+  );
+});
+// Handle a post request to upload an image.
+app.post("/upload", upload.single("newImage"), function(request, response) {
+  console.log(
+    "Recieved",
+    request.file.originalname,
+    request.file.size,
+    "bytes"
+  );
+  let filename = "/images/" + request.file.originalname;
+  if (request.file) {
+    // file is automatically stored in /images,
+    // even though we can't see it.
+    // We set this up when configuring multer
+    sendMediaStore(filename, request, response);
+  } else throw "error";
+});
+
+// UPLOAD img
+function sendMediaStore(filename, serverRequest, serverResponse) {
+  let apiKey = process.env.ECS162KEY;
+  if (apiKey === undefined) {
+    serverResponse.status(400);
+    serverResponse.send("No API key provided");
+  } else {
+    // we'll send the image from the server in a FormData object
+    let form = new FormData();
+    // we can stick other stuff in there too, like the apiKey
+    form.append("apiKey", apiKey);
+    // stick the image into the formdata object
+    form.append("storeImage", fs.createReadStream(__dirname + filename));
+    // and send it off to this URL
+    form.submit("http://ecs162.org:3000/fileUploadToAPI", function(
+      err,
+      APIres
+    ) {
+      // did we get a response from the API server at all?
+      if (APIres) {
+        // OK we did
+        console.log("API response status", APIres.statusCode);
+        // the body arrives in chunks - how gruesome!
+        // this is the kind stream handling that the body-parser
+        // module handles for us in Express.
+        let body = "";
+        APIres.on("data", chunk => {
+          body += chunk;
+        });
+        APIres.on("end", () => {
+          // now we have the whole body
+          if (APIres.statusCode != 200) {
+            serverResponse.status(400); // bad request
+            serverResponse.send(" Media server says: " + body);
+          } else {
+            serverResponse.status(200);
+            serverResponse.send(body);
+          }
+        });
+        fs.unlinkSync(__dirname + "/images/" + serverRequest.file.originalname);
+      } else {
+        // didn't get APIres at all
+        serverResponse.status(500); // internal server error
+        serverResponse.send("Media server seems to be down.");
+      }
+    });
+  }
+}
+
+function getLostAndFound(request, response, next) {
+  console.log(request.body);
+  let id = request.query.id;
+  let cmd = "SELECT * FROM lostfoundtable WHERE lostorfound='Found'";
+  db.all(cmd, function(err, row) {
+    if (err) {
+      console.log("Database reading error", err.message);
+      next();
+    } else {
+      // send shopping list to browser in HTTP response body as JSON
+      for (var i = 0; i < row.length; i++) {
+        console.log(row[i]);
+      }
+      response.json(row);
+      console.log("rows", row);
+    }
+  });
+}
+
+app.get("/getLostAndFound", getLostAndFound);

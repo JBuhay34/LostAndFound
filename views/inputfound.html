@@ -49,13 +49,17 @@
         <p class="label">
           Attach a photo (optional)
         </p>
-        <div class="img-btn" id="fileChooser">
-          <p class="own-label">
-            Choose File
-          </p>
+        <div class="img-btn image upload" id="fileChooser">
+          <img id="cardImg" alt="" />
+          <form method="post" enctype="multipart/form-data">
+            
+            
+            <input id="imgUpload" type="file" accept="image/*" name="photo" />
+            <label for="imgUpload" class="own-label">Choose a file</label>
+          </form>
         </div>
-        <div class="button" id="next-button">
-          <a href="/inputfoundlocation">
+        <div class="button" lostorfound="Found" id="next-button">
+          <a>
             <p id="next-text">
               Next
             </p>
