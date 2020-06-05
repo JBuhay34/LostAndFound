@@ -66,7 +66,7 @@ db.get(cmd, function(err, val) {
 
 function initDB() {
   const cmd =
-    "CREATE TABLE lostfoundtable ( rowIdNum INTEGER PRIMARY KEY, id TEXT, lostorfound TEXT, title TEXT, category TEXT, description TEXT, photourl TEXT, date TEXT, time TEXT, location TEXT)";
+    "CREATE TABLE lostfoundtable ( rowIdNum INTEGER PRIMARY KEY, id TEXT, lostorfound TEXT, title TEXT, category TEXT, description TEXT, photourl TEXT, date TEXT, endDate TEXT, location TEXT)";
   db.run(cmd, function(err, val) {
     if (err) {
       console.log("failed to create LFtable", err.message);
@@ -339,7 +339,7 @@ app.post("/saveitem", function(request, response, next) {
   let category = request.body.category;
   let description = request.body.description;
   let date = request.body.date;
-  let time = request.body.time;
+  let endDate = request.body.endDate;
   let location = request.body.location;
   let photourl = request.body.photourl;
   // console.log("id: ",id,"image: ",image,"message: ",message,"color",color,"font", font
@@ -347,7 +347,7 @@ app.post("/saveitem", function(request, response, next) {
 
   // Insert new DB row
   cmd =
-    "INSERT INTO lostfoundtable ( id , lostorfound, title, category , description, photourl, date , time , location ) VALUES (@0,@1,@2,@3,@4,@5,@6,@7,@8) ";
+    "INSERT INTO lostfoundtable ( id , lostorfound, title, category , description, photourl, date , endDate , location ) VALUES (@0,@1,@2,@3,@4,@5,@6,@7,@8) ";
   db.run(
     cmd,
     id,
@@ -357,7 +357,7 @@ app.post("/saveitem", function(request, response, next) {
     description,
     photourl,
     date,
-    time,
+    endDate,
     location,
     function(err) {
       if (err) {
@@ -438,21 +438,52 @@ function sendMediaStore(filename, serverRequest, serverResponse) {
 
 function getLostAndFound(request, response, next) {
   console.log(request.body);
-  let id = request.query.id;
-  let cmd = "SELECT * FROM lostfoundtable WHERE lostorfound='Found'";
+  
+  let cmd = "SELECT * FROM lostfoundtable";
+  console.log(cmd);
+  
+  if(request.body.lostorfound === "Found") {
+    cmd += " WHERE lostorfound='Found'";
+    console.log(cmd);
+  } else {
+    cmd += " WHERE lostorfound='Lost'";
+    console.log(cmd);
+  }
+  if(request.body.category !== '') {
+    cmd += " AND category='" + request.body.category + "'";
+    console.log(cmd);
+  }
+  if(request.body.location !== '') {
+    cmd += " AND location='" + request.body.location + "'";
+    console.log(cmd);
+  }
+  if(request.body.date !== '' && request.body.endDate !== 'NaN') {
+    cmd += " AND date > '" + request.body.date + "'" + " AND endDate < '" + request.body.endDate + "'";
+    console.log(cmd);
+  }
+  if(request.body.date !== '' && request.body.endDate === 'NaN') {
+    cmd += " AND date > '" + request.body.date + "'";
+    console.log(cmd);
+  }
+  if(request.body.date === '' && request.body.endDate !== 'NaN') {
+    cmd += " AND endDate < ''" + request.body.endDate + "'";
+    console.log(cmd);
+  }
+
+  
   db.all(cmd, function(err, row) {
     if (err) {
       console.log("Database reading error", err.message);
       next();
     } else {
       // send shopping list to browser in HTTP response body as JSON
-      for (var i = 0; i < row.length; i++) {
-        console.log(row[i]);
-      }
       response.json(row);
-      console.log("rows", row);
+      // console.log("rows", row);
     }
   });
 }
 
-app.get("/getLostAndFound", getLostAndFound);
+app.post("/getLostAndFound", getLostAndFound);
+
+
+

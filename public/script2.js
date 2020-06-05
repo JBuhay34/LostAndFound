@@ -1,6 +1,12 @@
 // define variables that reference elements on our page
 const submitButton = document.getElementById("submit-button");
 const nextButton = document.getElementById("next-button");
+
+const searchButton = document.getElementById("search-btn");
+
+var isSearching = 1;
+var categoryChecker = 1;
+
 function viewseshstorage() {
   for (let i = 0; i < window.sessionStorage.length; i++) {
     let key = window.sessionStorage.key(i);
@@ -8,8 +14,13 @@ function viewseshstorage() {
   }
 }
 function storeDataPage1() {
+  isSearching = 0;
+
   let title = document.getElementById("title-input").value;
   let cat = document.getElementById("category-input").value;
+  if (cat.length === 0) {
+    categoryChecker = 0;
+  }
   let des = document.getElementById("writemessage").value;
   let lostorfound = nextButton.getAttribute("lostorfound");
   window.sessionStorage.setItem("lostorfound", lostorfound);
@@ -27,13 +38,52 @@ function storeDataPage1() {
 }
 
 function storeDataPage2() {
-  let date = document.getElementById("date-input").value;
-  let time = document.getElementById("time-input").value;
-  window.sessionStorage.setItem("date", date);
-  window.sessionStorage.setItem("time", time);
+  
+  let date1 = document.getElementById("date-start-input").value;
+  let time1 = document.getElementById("time-start-input").value;
+  
+  if(date1.length == 0 || time1.length == 0){
+    if(document.getElementById("error-message") !== null){
+      document.getElementById("error-message").style.display = "flex";
+    }
+  }
 
-  if (date.length === 0 || time.length === 0) {
-    document.getElementById("error-message").style.display = "block";
+  var endDate = "";
+  if (isSearching) {
+    var date2 = document.getElementById("date-end-input");
+    var time2 = document.getElementById("time-end-input");
+    if (date2 !== null) {
+      date2 = date2.value;
+      time2 = time2.value;
+    } else {
+      date2 = "0";
+    }
+  }
+
+  var startDate = new Date(date1);
+
+  if (isSearching === 1 && document.getElementById("date-end-input") !== null) {
+    endDate = new Date(date2);
+  } else {
+    endDate = "";
+  }
+
+  var myEpochStartDate = startDate / 1000.0;
+  var myEpochEndDate = endDate / 1000.0;
+
+  window.sessionStorage.setItem("dateString", date1);
+  window.sessionStorage.setItem("endDateString", date2);
+  window.sessionStorage.setItem("date", myEpochStartDate);
+  window.sessionStorage.setItem("endDate", myEpochEndDate);
+
+
+  if (
+    isSearching === 1 &&
+    (date1.length === 0 || time1.length === 0) &&
+    (date2.length === 0 || time2.length === 0) &&
+    categoryChecker === 1
+  ) {
+    document.getElementById("error").style.display ="flex";
     return;
   }
 
@@ -44,7 +94,7 @@ function storeDataPage2() {
     description: window.sessionStorage.getItem("description"),
     photourl: window.sessionStorage.getItem("photourl"),
     date: window.sessionStorage.getItem("date"),
-    time: window.sessionStorage.getItem("time"),
+    endDate: window.sessionStorage.getItem("endDate"),
     location: "placeholder"
   };
 
@@ -62,7 +112,7 @@ function storeDataPage2() {
 
   let xhr = new XMLHttpRequest();
 
-  window.location = "https://lost-and-found-steps.glitch.me/resultsseeker"
+  window.location = "https://lost-and-found-steps.glitch.me/resultsseeker";
 }
 
 if (nextButton !== null) {
@@ -72,6 +122,15 @@ if (nextButton !== null) {
 if (submitButton !== null) {
   submitButton.addEventListener("click", storeDataPage2);
 }
+
+if (searchButton !== null) {
+  submitButton.addEventListener("click", isSearchingFunc);
+}
+
+function isSearchingFunc() {
+  isSearching = 1;
+}
+
 // UPLOAD IMAGE
 if (document.querySelector("#imgUpload") !== null) {
   document.querySelector("#imgUpload").addEventListener("change", () => {

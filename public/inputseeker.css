@@ -111,6 +111,13 @@ textarea {
   color: white;
 }
 
+#error{
+  display: none;
+  color:red;
+  align-self: flex-end;
+  margin-right: 10px;
+}
+
 .img-btn {
   background-color: #e5e5e5;
   margin-left: 10px;
