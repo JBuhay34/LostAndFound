@@ -20,6 +20,13 @@
     <!-- import the webpage's stylesheet -->
     <link rel="stylesheet" href="/inputseeker.css" />
     <link rel="stylesheet" href="/reset.css" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4mCOdPJMuezDURluL8iHW9z0e4RoPy1M&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+    <link rel="stylesheet" type="text/css" href="/map.css" />
+    <script src="/mapscript.js"></script>
   </head>
 
   <body>
@@ -44,7 +51,8 @@
         <p class="label">
           Location
         </p>
-        <input type="text" />
+        <input type="text" id="location-input"/>
+        <div id="map"></div>        
         <p id="error-message">
           Please complete all fields
         </p>

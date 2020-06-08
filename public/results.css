@@ -82,7 +82,7 @@ input {
 
 #card-list{
   margin-top:10px;
-  width:50%;
+  width:70%;
   display: flex;
   flex-direction:column;
 }
@@ -110,7 +110,7 @@ input {
 }
 
 img{
-  width: 100px;
+  width: 200px;
 }
 
 .img-details{
@@ -200,6 +200,12 @@ button{
   }
   
   img{
-    width: 200px;
+    width: 300px;
   }
+  
+  .card-list{
+    width:70%;
+
+  }
+
 }

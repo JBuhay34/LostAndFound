@@ -4,8 +4,11 @@ const nextButton = document.getElementById("next-button");
 
 const searchButton = document.getElementById("search-btn");
 
-var isSearching = 1;
+var isSearching = 0;
 var categoryChecker = 1;
+var startDateChecker = 1;
+var endDateChecker = 1;
+var locationChecker = 1;
 
 function viewseshstorage() {
   for (let i = 0; i < window.sessionStorage.length; i++) {
@@ -13,15 +16,34 @@ function viewseshstorage() {
     alert(`${key}: ${window.sessionStorage.getItem(key)}`);
   }
 }
+
 function storeDataPage1() {
   isSearching = 0;
+  categoryChecker = 1;
+  startDateChecker = 1;
+  endDateChecker = 1;
 
-  let title = document.getElementById("title-input").value;
-  let cat = document.getElementById("category-input").value;
-  if (cat.length === 0) {
-    categoryChecker = 0;
+  let title = document.getElementById("title-input");
+  if (title !== null) {
+    title = title.value;
+  } else {
+    title = "";
   }
-  let des = document.getElementById("writemessage").value;
+
+  let cat = document.getElementById("category-input");
+  if (cat !== null) {
+    cat = cat.value;
+  } else {
+    cat = "";
+  }
+
+  let des = document.getElementById("writemessage");
+  if (des !== null) {
+    des = des.value;
+  } else {
+    des = "";
+  }
+
   let lostorfound = nextButton.getAttribute("lostorfound");
   window.sessionStorage.setItem("lostorfound", lostorfound);
   window.sessionStorage.setItem("title", title);
@@ -29,61 +51,112 @@ function storeDataPage1() {
   window.sessionStorage.setItem("description", des);
   //viewseshstorage();
   var currentDir = window.location.pathname;
-  if ((currentDir = "/inputseeker")) {
+  console.log(currentDir);
+  if (currentDir === "/inputseeker") {
     window.location =
       "https://lost-and-found-steps.glitch.me/inputseekerlocation";
   } else if ((currentDir = "/inputfound")) {
-    ("https://lost-and-found-steps.glitch.me/inputfoundlocation");
+    window.location = "https://lost-and-found-steps.glitch.me/inputfoundlocation";
   }
 }
 
 function storeDataPage2() {
-  
-  let date1 = document.getElementById("date-start-input").value;
-  let time1 = document.getElementById("time-start-input").value;
-  
-  if(date1.length == 0 || time1.length == 0){
-    if(document.getElementById("error-message") !== null){
-      document.getElementById("error-message").style.display = "flex";
+    let cat = document.getElementById("category-input-search");
+    if (cat !== null) {
+      if(cat.value === "") {
+        categoryChecker = 0;
+        window.sessionStorage.setItem("category", cat.value);
+      } else {
+        window.sessionStorage.setItem("category", cat.value);
+        categoryChecker = 1;
+      }
+      isSearching = 1;
+    } else {
+      isSearching = 0;
+      categoryChecker = 0;
     }
+  
+  let loc = window.sessionStorage.getItem("location");
+  if(loc !== null) {
+    locationChecker = 1;
+  } else {
+    locationChecker = 0;
+  }
+  
+  
+  
+  let date1 = document.getElementById("date-start-input");
+  if (date1 !== null) {
+    date1 = date1.value;
+    startDateChecker = 1;
+  } else {
+    date1 = "";
+    startDateChecker = 0;
   }
 
-  var endDate = "";
+  let time1 = document.getElementById("time-start-input");
+  if (time1 !== null) {
+    time1 = time1.value;
+  } else {
+    time1 = "";
+  }
+
+  var endDate;
+  var date2;
+  var time2;
   if (isSearching) {
-    var date2 = document.getElementById("date-end-input");
-    var time2 = document.getElementById("time-end-input");
+     date2 = document.getElementById("date-end-input");
+     time2 = document.getElementById("time-end-input");
     if (date2 !== null) {
       date2 = date2.value;
-      time2 = time2.value;
+      if (time2 !== null) {
+        time2 = time2.value;
+      } else {
+        time2 = "";
+      }
+      endDateChecker = 1;
     } else {
-      date2 = "0";
+      date2 = "";
+      endDateChecker = 0;
     }
+  } else {
+    date2 = "";
+    time2 = "";
   }
 
-  var startDate = new Date(date1);
+  var startDate;
+  if (time1 !== "" && date1 !== "") {
+    var milliseconds1 = getSeconds(time1);
+    startDate = new Date(date1).getTime();
+    startDate += milliseconds1;
+    startDateChecker = 1;
+  } else {
+    startDate = "";
+      startDateChecker = 0;
+  }
 
-  if (isSearching === 1 && document.getElementById("date-end-input") !== null) {
-    endDate = new Date(date2);
+  if (isSearching && date2 !== "" && time2 !== "") {
+    var milliseconds2 = getSeconds(time2);
+    endDate = new Date(date2).getTime();
+    endDate += milliseconds2;
+    endDateChecker = 1;
   } else {
     endDate = "";
+    endDateChecker = 0;
   }
 
   var myEpochStartDate = startDate / 1000.0;
   var myEpochEndDate = endDate / 1000.0;
+  
 
   window.sessionStorage.setItem("dateString", date1);
   window.sessionStorage.setItem("endDateString", date2);
   window.sessionStorage.setItem("date", myEpochStartDate);
   window.sessionStorage.setItem("endDate", myEpochEndDate);
+  
 
-
-  if (
-    isSearching === 1 &&
-    (date1.length === 0 || time1.length === 0) &&
-    (date2.length === 0 || time2.length === 0) &&
-    categoryChecker === 1
-  ) {
-    document.getElementById("error").style.display ="flex";
+  if (isSearching && categoryChecker === 0 && startDateChecker === 0 && endDateChecker === 0 && locationChecker === 0) {
+    document.getElementById("error-message").style.display = "flex";
     return;
   }
 
@@ -95,25 +168,29 @@ function storeDataPage2() {
     photourl: window.sessionStorage.getItem("photourl"),
     date: window.sessionStorage.getItem("date"),
     endDate: window.sessionStorage.getItem("endDate"),
-    location: "placeholder"
+    location: window.sessionStorage.getItem("location")
   };
 
   // new HttpRequest instance
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("POST", "/saveitem");
-  // important to set this for body-parser
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlhttp.onloadend = function(e) {
-    console.log(xmlhttp.responseText);
-  };
-  // all set up!  Send off the HTTP request
-  xmlhttp.send(JSON.stringify(data));
+  if (window.sessionStorage.getItem("lostorfound") === "Found") {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("POST", "/saveitem");
+    // important to set this for body-parser
+    xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlhttp.onloadend = function(e) {
+      console.log(xmlhttp.responseText);
+    };
+    // all set up!  Send off the HTTP request
+    xmlhttp.send(JSON.stringify(data));
+  }
   //TODO: List of items here
 
   let xhr = new XMLHttpRequest();
+  window.sessionStorage.removeItem("photourl");
 
   window.location = "https://lost-and-found-steps.glitch.me/resultsseeker";
 }
+
 
 if (nextButton !== null) {
   nextButton.addEventListener("click", storeDataPage1);
@@ -124,7 +201,7 @@ if (submitButton !== null) {
 }
 
 if (searchButton !== null) {
-  submitButton.addEventListener("click", isSearchingFunc);
+  searchButton.addEventListener("click", isSearchingFunc);
 }
 
 function isSearchingFunc() {
@@ -162,4 +239,16 @@ if (document.querySelector("#imgUpload") !== null) {
     // actually send the request
     xhr.send(formData);
   });
+}
+
+function getSeconds(timeValue) {
+  let splitByColon = timeValue.split(":");
+  var hoursValue = parseInt(splitByColon[0]);
+
+  let splitForMins = splitByColon[1].split(" ");
+  if (splitForMins[1] === "PM") {
+    hoursValue = hoursValue + 12;
+  }
+  var minutesValue = parseInt(splitForMins[0]);
+  return 3600 * hoursValue + 60 * minutesValue * 1000;
 }

@@ -2,11 +2,9 @@
 var node = document.createElement("LI"); // Create a <li> node
 
 let xhr = new XMLHttpRequest();
-
 var dateResultsString = document.getElementById("results-date");
 
 var editSearchButton = document.getElementById("editSearchButton");
-
 
 xhr.open("POST", "/getLostAndFound");
 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -17,8 +15,6 @@ xhr.onloadend = function(e) {
 
   // responseText is a string
   let data = JSON.parse(xhr.responseText);
-
-  var date = new Date(window.sessionStorage.getItem("dateString"));
 
   var months = new Array(
     "January",
@@ -35,12 +31,22 @@ xhr.onloadend = function(e) {
     "December"
   );
 
-  var day = date.getDate() + 1;
-  var month = date.getMonth();
+  if (
+    window.sessionStorage.getItem("date") !== "NaN" &&
+    window.sessionStorage.getItem("date") !== "0"
+  ) {
+    var date = new Date(window.sessionStorage.getItem("dateString"));
+    var day = date.getDate() + 1;
+    var month = date.getMonth();
+    dateResultsString.innerHTML = months[month] + " " + day;
+  } else {
+    dateResultsString.innerHTML = "All Results";
+  }
 
-  dateResultsString.innerHTML = months[month] + " " + day;
-
-  if (window.sessionStorage.getItem("endDate") !== 'NaN') {
+  if (
+    window.sessionStorage.getItem("endDate") !== "NaN" &&
+    window.sessionStorage.getItem("endDate") !== "0"
+  ) {
     var endDate = new Date(window.sessionStorage.getItem("endDateString"));
     var day2 = endDate.getDate() + 1;
     var month2 = endDate.getMonth();
@@ -53,8 +59,12 @@ xhr.onloadend = function(e) {
   }
 
   if (window.sessionStorage.getItem("location") !== "placeholder") {
-    dateResultsString.innerHTML +=
-      " , " + "location placeholder";
+    if(window.sessionStorage.getItem("location").length > 20){
+      dateResultsString.innerHTML += " , " + window.sessionStorage.getItem("location").substring(0, 20) + "...";
+    } else{
+      dateResultsString.innerHTML += " , " + window.sessionStorage.getItem("location");
+
+    }
   }
 
   for (var i = 0; i < data.length; i++) {
@@ -63,14 +73,15 @@ xhr.onloadend = function(e) {
     var category = data[i].category;
     var loc = data[i].location;
     var date = data[i].date;
+    var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+    d.setUTCSeconds(date);
     var description = data[i].description;
     var endDate = data[i].endDate;
     var photourl = data[i].photourl;
     var id = i;
-
     var div = document.createElement("div");
     div.id = "container" + i;
-    console.log("photo:" + photourl);
+    console.log("location:" + loc);
     if (photourl === null) {
       div.innerHTML =
         "<p class='title'>" +
@@ -79,11 +90,11 @@ xhr.onloadend = function(e) {
         '<div class="card-details"><div class="card-label"><b>Category</b> ' +
         category +
         "</div>" +
-        '<div class="card-label"><b>Location</b> ' +
+        '<div class="card-label"><b>Location</b> ' + " " +
         loc +
         "</div>" +
         '<div class="card-label"><b>Date</b> ' +
-        date +
+        d +
         "</div>" +
         '<div class="card-desc">' +
         description +
@@ -107,7 +118,7 @@ xhr.onloadend = function(e) {
         loc +
         "</div>" +
         '<div class="card-label"><b>Date</b> ' +
-        date +
+        d +
         "</div>" +
         '<div class="card-desc">' +
         description +
@@ -122,6 +133,11 @@ xhr.onloadend = function(e) {
     node.appendChild(div); // Append the div to <li>
     document.getElementById("card-list").appendChild(node); // Append <li> to <ul> with id="myList"
   }
+  
+  window.sessionStorage.removeItem("location");
+  window.sessionStorage.removeItem("category");
+  window.sessionStorage.removeItem("date");
+  window.sessionStorage.removeItem("endDate");
 };
 
 let data = {
@@ -129,7 +145,7 @@ let data = {
   category: window.sessionStorage.getItem("category"),
   date: window.sessionStorage.getItem("date"),
   endDate: window.sessionStorage.getItem("endDate"),
-  location: "placeholder"
+  location: window.sessionStorage.getItem("location")
 };
 
 // send off request
@@ -140,8 +156,9 @@ function toggleSwitch(id) {
   var card = document.getElementById("container" + id);
   if (moreVar.textContent === "More") {
     moreVar.textContent = "Less";
-    console.log(card.children[1]);
+    console.log(card.children[1].children[1]);
     card.children[1].style.display = "flex";
+    card.children[1].children[1].style.display ="flex";
   } else {
     moreVar.textContent = "More";
     card.children[1].style.display = "none";

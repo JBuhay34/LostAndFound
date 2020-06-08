@@ -66,7 +66,7 @@ db.get(cmd, function(err, val) {
 
 function initDB() {
   const cmd =
-    "CREATE TABLE lostfoundtable ( rowIdNum INTEGER PRIMARY KEY, id TEXT, lostorfound TEXT, title TEXT, category TEXT, description TEXT, photourl TEXT, date TEXT, endDate TEXT, location TEXT)";
+    "CREATE TABLE lostfoundtable ( rowIdNum INTEGER PRIMARY KEY, id TEXT, lostorfound TEXT, title TEXT, category TEXT, description TEXT, photourl TEXT, date FLOAT, endDate FLOAT, location TEXT)";
   db.run(cmd, function(err, val) {
     if (err) {
       console.log("failed to create LFtable", err.message);
@@ -209,6 +209,7 @@ app.get("/inputfoundlocation", (request, response) => {
   response.sendFile(__dirname + "/views/inputfoundlocation.html");
 });
 
+
 app.get("/inputseeker", (request, response) => {
   response.sendFile(__dirname + "/views/inputseeker.html");
 });
@@ -228,6 +229,8 @@ app.get("/searchseeker?:item", (request, response) => {
 app.get("/searchfound?:item", (request, response) => {
   response.sendFile(__dirname + "/views/searchfound.html");
 });
+
+
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, () => {
@@ -446,30 +449,29 @@ function getLostAndFound(request, response, next) {
     cmd += " WHERE lostorfound='Found'";
     console.log(cmd);
   } else {
-    cmd += " WHERE lostorfound='Lost'";
+    cmd += " WHERE lostorfound='Found'";
     console.log(cmd);
   }
   if(request.body.category !== '') {
     cmd += " AND category='" + request.body.category + "'";
     console.log(cmd);
   }
-  if(request.body.location !== '') {
+  if(request.body.location !== '' && request.body.location !== null) {
     cmd += " AND location='" + request.body.location + "'";
     console.log(cmd);
   }
-  if(request.body.date !== '' && request.body.endDate !== 'NaN') {
-    cmd += " AND date > '" + request.body.date + "'" + " AND endDate < '" + request.body.endDate + "'";
+  if(request.body.date !== '' && request.body.date !== '0' && request.body.date !== 'NaN' && request.body.endDate !== 'NaN' && request.body.endDate !== '0') {
+    cmd += " AND date BETWEEN '" + request.body.date + "'" + " AND '" + request.body.endDate + "'";
     console.log(cmd);
   }
-  if(request.body.date !== '' && request.body.endDate === 'NaN') {
-    cmd += " AND date > '" + request.body.date + "'";
+  if((request.body.date !== '' && request.body.date !== '0' && request.body.date !== 'NaN') && (request.body.endDate === 'NaN' || request.body.endDate === '0')) {
+    cmd += " AND date>='" + request.body.date + "'";
     console.log(cmd);
   }
-  if(request.body.date === '' && request.body.endDate !== 'NaN') {
-    cmd += " AND endDate < ''" + request.body.endDate + "'";
+  if((request.body.date === '' || request.body.date === '0' || request.body.date !== 'NaN') && request.body.endDate !== 'NaN' && request.body.endDate !== '0') {
+    cmd += " AND endDate<='" + request.body.endDate + "'";
     console.log(cmd);
   }
-
   
   db.all(cmd, function(err, row) {
     if (err) {
@@ -482,8 +484,22 @@ function getLostAndFound(request, response, next) {
     }
   });
 }
-
 app.post("/getLostAndFound", getLostAndFound);
 
+
+//map stuff
+app.get("/getInfo", (req, res) => {
+  res.json({text: "request success"});
+});
+// USE REVERSE GEOCODING TO GET ADDRESS
+// SEE https://developers.google.com/maps/documentation/geocoding/intro#reverse-example
+app.get("/getAddress", (req, res) => {
+  let url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + req.query.lat + ", " + req.query.lng + "&key="
+  + process.env.API_KEY;
+  request(url, { json: true }, (error, response, body) => {
+    if (error) { return console.log(error); }
+    res.json(body);
+  });
+})
 
 
